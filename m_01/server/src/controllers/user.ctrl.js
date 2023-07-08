@@ -56,9 +56,47 @@ const signin = async (req, res) => {
   }
 };
 
+const updatePassword = async (req, res) => {
+    try {
+      const { password, newPassword } = req.body;
+  
+      const user = await userModel.findById(req.user.id).select("password id salt");
+  
+      if (!user) return responseHandler.unauthorize(res);
+  
+      if (!user.validPassword(password)) return responseHandler.badrequest(res, "Wrong password");
+  
+      user.setPassword(newPassword);
+  
+      await user.save();
+  
+      responseHandler.ok(res);
+    } catch {
+      responseHandler.error(res);
+    }
+  };
+  const getInfo = async (req, res) => {
+    try {
+      const user = await userModel.findById(req.user.id);
+  
+      if (!user) return responseHandler.notfound(res);
+  
+      responseHandler.ok(res, user);
+    } catch {
+      responseHandler.error(res);
+    }
+  };
 const zzz = async (req, res) => {
   try {
   } catch {
     responseHandler.error(res);
   }
 };
+
+
+export default {
+    signup,
+    signin,
+    getInfo,
+    updatePassword
+  };
