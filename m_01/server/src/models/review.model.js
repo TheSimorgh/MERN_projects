@@ -3,11 +3,15 @@ import mongoose, { Schema } from "mongoose";
 import modelOptions from "./model.options.js";
 
 export default mongoose.model(
-  "Favorite",
+  "Review",
   mongoose.Schema({
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true
+    },
+    content: {
+      type: String,
       required: true
     },
     mediaType: {
@@ -25,10 +29,6 @@ export default mongoose.model(
     },
     mediaPoster: {
       type: String,
-      required: true
-    },
-    mediaRate: {
-      type: Number,
       required: true
     },
   }, modelOptions)
