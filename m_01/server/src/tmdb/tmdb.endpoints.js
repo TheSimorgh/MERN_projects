@@ -11,7 +11,6 @@ const tmdbEndpoints={
     mediaSearch:({mediaType,query,page})=> tmdbConfig.getUrl ( `search/${mediaType}`, { query, page }),
     personDetail:({personId})=> tmdbConfig.getUrl ( `person/${personId}`),
     personMedias:({personId})=> tmdbConfig.getUrl ( `person/${personId}/combined_credits`),
-
 }
 
 export default tmdbEndpoints
