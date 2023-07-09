@@ -44,3 +44,17 @@ const remove = async (req, res) => {
       responseHandler.error(res);
     }
   };
+
+  const getReviewsOfUser = async (req, res) => {
+    try {
+      const reviews = await reviewModel.find({
+        user: req.user.id
+      }).sort("-createdAt");
+  
+      responseHandler.ok(res, reviews);
+    } catch {
+      responseHandler.error(res);
+    }
+  };
+  
+  export default { create, remove, getReviewsOfUser };
