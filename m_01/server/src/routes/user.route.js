@@ -72,3 +72,10 @@ router.put(
     tokenMiddleware.auth,
     userCtrl.getInfo
   );
+
+  router.get(
+    "/favorites",
+    tokenMiddleware.auth,
+    favoriteController.getFavoritesOfUser
+  );
+  
