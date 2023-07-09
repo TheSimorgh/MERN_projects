@@ -7,21 +7,32 @@ import tokenMiddleware from "../midllewares/token.middleware.js";
 
 const getList = async (req, res) => {
   try {
-    const {page}=req.query
-    const {mediaType,mediaCategory}= req.params
-    const response = await tmdbApi.mediaList({mediaType,mediaCategory,page});
-    return responseHandler.ok(res,response)
+    const { page } = req.query;
+    const { mediaType, mediaCategory } = req.params;
+    const response = await tmdbApi.mediaList({
+      mediaType,
+      mediaCategory,
+      page,
+    });
+    return responseHandler.ok(res, response);
   } catch (error) {
     responseHandler.error(res);
   }
 };
 
-
-
+const getGenres = async (req, res) => {
+  try {
+    const { mediaType } = req.params;
+    const response = await tmdbApi.mediaGenres({ mediaType });
+    return responseHandler.ok(res, response);
+  } catch (error) {
+    responseHandler.error(res);
+  }
+};
 
 const zzzz = async (req, res) => {
-    try {
-    } catch (error) {
-      responseHandler.error(res);
-    }
-  };
+  try {
+  } catch (error) {
+    responseHandler.error(res);
+  }
+};
