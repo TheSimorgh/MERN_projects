@@ -31,3 +31,16 @@ requestHandler.validate,
 userCtrl.signup
 
 )
+
+router.post(
+    "/signin",
+    body("username")
+      .exists().withMessage("username is required")
+      .isLength({ min: 8 }).withMessage("username minimum 8 characters"),
+    body("password")
+      .exists().withMessage("password is required")
+      .isLength({ min: 8 }).withMessage("password minimum 8 characters"),
+    requestHandler.validate,
+    userCtrl.signin
+  );
+  
