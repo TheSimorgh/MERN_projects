@@ -48,11 +48,11 @@ const getDetail = async (req, res) => {
   try {
     const { mediaType, mediaId } = req.params;
     const params = { mediaType, mediaId };
-    const media = await tmdbApi.mediaDetail(params)
+    const media = await tmdbApi.mediaDetail(params);
     console.log(params);
     console.log("media");
     console.log(media);
-    media.credits=await tmdbApi.mediaCredits(params)
+    media.credits = await tmdbApi.mediaCredits(params);
     const videos = await tmdbApi.mediaVideos(params);
     media.videos = videos;
     console.log("videos");
@@ -68,16 +68,22 @@ const getDetail = async (req, res) => {
       const user = await userModel.findById(tokenDecoded.data);
 
       if (user) {
-        const isFavorite = await favoriteModel.findOne({ user: user.id, mediaId });
+        const isFavorite = await favoriteModel.findOne({
+          user: user.id,
+          mediaId,
+        });
         media.isFavorite = isFavorite !== null;
       }
     }
 
-    media.reviews = await reviewModel.find({ mediaId }).populate("user").sort("-createdAt");
-
+    media.reviews = await reviewModel
+      .find({ mediaId })
+      .populate("user")
+      .sort("-createdAt");
 
     return responseHandler.ok(res, response);
   } catch (error) {
+    console.log(error);
     responseHandler.error(res);
   }
 };
@@ -87,3 +93,4 @@ const zzzz = async (req, res) => {
     responseHandler.error(res);
   }
 };
+export default { getList, getGenres, search, getDetail };
