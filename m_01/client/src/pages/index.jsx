@@ -6,4 +6,5 @@ export {default as MediaSearch} from "./MediaSearch";
 export {default as PasswordUpdate} from "./PasswordUpdate";
 export {default as ReviewList} from "./ReviewList";
 export {default as PersonDetail} from "./PersonDetail";
+export {default as NotFound} from "./NotFound";
 
