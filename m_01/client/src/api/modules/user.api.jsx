@@ -51,3 +51,5 @@ const userApi={
         } catch (err) { return { err }; }
       }
 }
+
+export default userApi;
