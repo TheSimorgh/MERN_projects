@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
@@ -6,7 +7,7 @@ const MainLayout = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.user);
 
-    
+
   return (
     <>
       <Box display="flex" minHeight="100vh">
