@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import ProtectedPage from "../cmps/common/ProtectedPage";
-import {Home,MediaDetail,PersonDetail,MediaSearch,MediaList,PasswordUpdate,ReviewList,FavoriteList} from "../pages"
+import {Home,MediaDetail,PersonDetail,MediaSearch,MediaList,PasswordUpdate,ReviewList,FavoriteList, NotFound} from "../pages"
 const routesGen = {
   home: "/",
   mediaList: (type) => `/${type}`,
@@ -64,6 +64,11 @@ const routes=[
       {
         path: "/:mediaType/:mediaId",
         element: <MediaDetail />
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+        state: "Not_Found"
       }
     ];
     
