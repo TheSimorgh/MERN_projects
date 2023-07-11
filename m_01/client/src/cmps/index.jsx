@@ -6,5 +6,5 @@ export {default as Container} from "./common/Container.jsx";
 export {default as Footer} from "./common/Footer.jsx";
 
 export {default as Topbar} from "./Navbar/Topbar.jsx";
-
+export {default as UserMenu} from "./Navbar/UserMenu.jsx";
 export {default as MainLayout} from "./layout/MainLayout.jsx";
