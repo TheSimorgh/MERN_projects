@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-
 import { LoadingButton } from "@mui/lab";
 import { Alert, Box, Button, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
@@ -8,9 +6,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import userApi from "../../api/modules/user.api";
-import { setAuthModalOpen } from "../../redux/features/authModalSlice";
-import { setUser } from "../../redux/features/userSlice";
+import userApi from "../../../api/modules/user.api";
+import { setUser } from "../../../redux/features/userSlice";
+import { setAuthModalOpen } from "../../../redux/features/authModalSlice";
+
 
 const SignupForm = ({ switchAuthState }) => {
   const dispatch = useDispatch();
@@ -43,7 +42,7 @@ const SignupForm = ({ switchAuthState }) => {
     onSubmit: async values => {
       setErrorMessage(undefined);
       setIsLoginRequest(true);
-      console.log("signinForm");
+      console.log("asdasdasdasd");
       const { response, err } = await userApi.signup(values);
       setIsLoginRequest(false);
 

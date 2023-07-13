@@ -1,10 +1,10 @@
 import express from "express";
 import { body } from "express-validator";
-import favoriteController from "../controllers/favorite.controller.js";
+import favoriteCtrl from "../controllers/favorite.ctrl.js";
 import requestHandler from "../handlers/request.handler.js";
 import userCtrl from "../controllers/user.ctrl.js";
 import tokenMiddleware from "../middleware/token.middleware.js";
-import favoriteCtrl from "../controllers/favorite.ctrl.js";
+import userModel from "../models/user.model.js";
 
 const router = express.Router();
 

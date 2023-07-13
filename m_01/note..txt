@@ -1,0 +1,8 @@
+
+FrontEnd packages
+npm create vite@latest 
+npm i  @fontsource/roboto @emotion/styled @emotion/react @mui/lab @mui/icons-material @mui/icons-material @reduxjs/toolkit axios dayjs formik query-string react-redux react-router-dom react-toastify swiper yup
+sudo service mongod restart
+BackEnd packages 
+npm init -y 
+npm i axios cookie-parser cors dotenv express crypto express-validator jsonwebtoken mongoose nodemon

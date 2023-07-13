@@ -1,24 +1,30 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import { LoadingButton } from "@mui/lab";
 import { Alert, Box, Button, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
-import { setUser } from "../../../redux/features/userSlice";
+import userApi from '../../../api/modules/user.api'
 import { setAuthModalOpen } from "../../../redux/features/authModalSlice";
-import userApi from "../../../api/modules/user.api";
+import { setUser } from "../../../redux/features/userSlice";
+import { useNavigate } from "react-router-dom";
+import { Formik } from "formik";
+
+
 const SigninForm = ({ switchAuthState }) => {
   const dispatch = useDispatch();
+
   const [isLoginRequest, setIsLoginRequest] = useState(false);
-  const [errorMessage, setErrorMEssage] = useState();
+  const [errorMessage, setErrorMessage] = useState();
+
   const signinForm = useFormik({
     initialValues: {
       password: "",
-      username: "",
+      username: ""
     },
     validationSchema: Yup.object({
       username: Yup.string()
@@ -26,12 +32,12 @@ const SigninForm = ({ switchAuthState }) => {
         .required("username is required"),
       password: Yup.string()
         .min(8, "password minimum 8 characters")
-        .required("password is required"),
+        .required("password is required")
     }),
-    onSubmit: async (values) => {
-      setErrorMEssage(undefined);
+    onSubmit: async values => {
+      setErrorMessage(undefined);
       setIsLoginRequest(true);
-      console.log(`onSubmit`);
+      console.log("asdasdasdasd");
       const { response, err } = await userApi.signin(values);
       setIsLoginRequest(false);
 
@@ -41,63 +47,64 @@ const SigninForm = ({ switchAuthState }) => {
         dispatch(setAuthModalOpen(false));
         toast.success("Sign in success");
       }
-      if (err) setErrorMEssage(err.message);
-    },
+
+      if (err) setErrorMessage(err.message);
+    }
   });
 
-return (
-  <Box component="form" onSubmit={signinForm.handleSubmit}>
-  <Stack spacing={3}>
-    <TextField
-      type="text"
-      placeholder="username"
-      name="username"
-      fullWidth
-      value={signinForm.values.username}
-      onChange={signinForm.handleChange}
-      color="success"
-      error={signinForm.touched.username && signinForm.errors.username !== undefined}
-      helperText={signinForm.touched.username && signinForm.errors.username}
-    />
-    <TextField
-      type="password"
-      placeholder="password"
-      name="password"
-      fullWidth
-      value={signinForm.values.password}
-      onChange={signinForm.handleChange}
-      color="success"
-      error={signinForm.touched.password && signinForm.errors.password !== undefined}
-      helperText={signinForm.touched.password && signinForm.errors.password}
-    />
-  </Stack>
+  return (
+    <Box component="form" onSubmit={signinForm.handleSubmit}>
+      <Stack spacing={3}>
+        <TextField
+          type="text"
+          placeholder="username"
+          name="username"
+          fullWidth
+          value={signinForm.values.username}
+          onChange={signinForm.handleChange}
+          color="success"
+          error={signinForm.touched.username && signinForm.errors.username !== undefined}
+          helperText={signinForm.touched.username && signinForm.errors.username}
+        />
+        <TextField
+          type="password"
+          placeholder="password"
+          name="password"
+          fullWidth
+          value={signinForm.values.password}
+          onChange={signinForm.handleChange}
+          color="success"
+          error={signinForm.touched.password && signinForm.errors.password !== undefined}
+          helperText={signinForm.touched.password && signinForm.errors.password}
+        />
+      </Stack>
 
-  <LoadingButton
-    type="submit"
-    fullWidth
-    size="large"
-    variant="contained"
-    sx={{ marginTop: 4 }}
-    loading={isLoginRequest}
-  >
-    sign in
-  </LoadingButton>
+      <LoadingButton
+        type="submit"
+        fullWidth
+        size="large"
+        variant="contained"
+        sx={{ marginTop: 4 }}
+        loading={isLoginRequest}
+      >
+        sign in
+      </LoadingButton>
 
-  <Button
-    fullWidth
-    sx={{ marginTop: 1 }}
-    onClick={() => switchAuthState()}
-  >
-    sign up
-  </Button>
+      <Button
+        fullWidth
+        sx={{ marginTop: 1 }}
+        onClick={() => switchAuthState()}
+      >
+        sign up
+      </Button>
 
-  {errorMessage ? (
-    <Box sx={{ marginTop: 2 }}>
-      <Alert severity="error" variant="outlined" >{errorMessage}</Alert>
+      {errorMessage && (
+        <Box sx={{ marginTop: 2 }}>
+          <Alert severity="error" variant="outlined" >{errorMessage}</Alert>
+        </Box>
+      )}
     </Box>
-  ):null}
-</Box>
-)
+  );
 };
 
 export default SigninForm;
