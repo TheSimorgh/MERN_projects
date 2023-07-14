@@ -18,4 +18,4 @@ const isLoggin =(req,res,next)=>{
     })
 }
 
-module.exports=isLogin;
+module.exports=isLoggin;

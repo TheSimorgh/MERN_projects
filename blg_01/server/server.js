@@ -5,7 +5,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const connectDB = require("./src/config/database");
 mongoose.set("strictQuery", true);
-const routes =require("./src/routes/index.js")
+const routes =require("./src/routes/index.js");
+const { notFound, globalErrHandler } = require("./src/middleware/globalErrorHandler");
 const app = express();
 // const http = require("http");
 // const { readdirSync } = require("fs");
@@ -27,6 +28,8 @@ app.use(cors());
 // readdirSync("./routes").map((r)=>app.use("/",require("./routes/"+r)))
 // readdirSync("./src/routes/").map((r)=>app.use(`/api/v1/${r}/`,require("./src/routes/"+r)))
 app.use("/api/v1", routes);
+app.use(notFound);
+app.use(globalErrHandler)
 ;(async function server() {
     try {
         const PORT = process.env.PORT || 9080;  

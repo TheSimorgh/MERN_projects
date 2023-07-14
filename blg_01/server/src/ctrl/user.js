@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
-const User =require("../model/User")
+const User = require("../model/User");
 //@desc Register a new user
 //@route POST /api/v1/users/register
 //@access public
@@ -65,6 +65,25 @@ exports.login = asyncHandler(async (req, res) => {
     token: generateToken(user),
     profilePicture: user?.profilePicture,
     isVerified: user?.isVerified,
-    User:{user, token: generateToken(user),}
+    User: { user, token: generateToken(user) },
   });
 });
+
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+    res.send({ message: "getProfile" ,user});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getme = async (req, res) => {
+  try {
+    const user = await User.findById(req.userAuth._id)
+    res.send({ message: "getProfile" ,user});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
