@@ -65,5 +65,6 @@ exports.login = asyncHandler(async (req, res) => {
     token: generateToken(user),
     profilePicture: user?.profilePicture,
     isVerified: user?.isVerified,
+    User:{user, token: generateToken(user),}
   });
 });

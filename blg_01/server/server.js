@@ -1,20 +1,21 @@
 const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
-// const http = require("http");
 const express = require("express");
 const mongoose = require("mongoose");
-const { readdirSync } = require("fs");
 const connectDB = require("./src/config/database");
 mongoose.set("strictQuery", true);
 const routes =require("./src/routes/index.js")
 const app = express();
+// const http = require("http");
+// const { readdirSync } = require("fs");
+
 //middlewares
 app.use(express.json()); //Pass incoming data
 // app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-//cors middleware
+//cors middleware 
 app.use(cors());
 
 
@@ -22,9 +23,7 @@ app.use(cors());
 //? Start the server
 
 
-app.get("/",(req,res)=>{
-    res.send("XXXXXXX")
-})
+// app.get("/",(req,res)=>{res.send("XXXXXXX")})
 // readdirSync("./routes").map((r)=>app.use("/",require("./routes/"+r)))
 // readdirSync("./src/routes/").map((r)=>app.use(`/api/v1/${r}/`,require("./src/routes/"+r)))
 app.use("/api/v1", routes);
