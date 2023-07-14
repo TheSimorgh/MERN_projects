@@ -1,1 +1,4 @@
 npm i multer nodemon nodemailer express-async-handler cors cloudinary multer-storage-cloudinary
+
+
+sudo service mongod restart
