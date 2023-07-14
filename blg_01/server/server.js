@@ -1,12 +1,13 @@
 const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
-const http = require("http");
+// const http = require("http");
 const express = require("express");
 const mongoose = require("mongoose");
 const { readdirSync } = require("fs");
 const connectDB = require("./src/config/database");
 mongoose.set("strictQuery", true);
+const routes =require("./src/routes/index.js")
 const app = express();
 //middlewares
 app.use(express.json()); //Pass incoming data
@@ -24,8 +25,9 @@ app.use(cors());
 app.get("/",(req,res)=>{
     res.send("XXXXXXX")
 })
-// readdirSync("./routes").map((r)=>app.use("/api/v1/",require("./routes/"+r)))
-
+// readdirSync("./routes").map((r)=>app.use("/",require("./routes/"+r)))
+// readdirSync("./src/routes/").map((r)=>app.use(`/api/v1/${r}/`,require("./src/routes/"+r)))
+app.use("/api/v1", routes);
 ;(async function server() {
     try {
         const PORT = process.env.PORT || 9080;  
