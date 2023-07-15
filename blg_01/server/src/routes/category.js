@@ -1,13 +1,13 @@
 const express = require("express");
-const { get, getCategories, createCategory, deleteCategories, updateCategories } = require("../ctrl/category");
 const isLoggin = require("../middleware/isLoggin");
+const { get_all_category, create_category, delete_category, update_category } = require("../ctrl/category");
 const router = express.Router();
 
-router.get("/", get);
-router.get("/", getCategories);
-router.post("/", isLoggin, createCategory);
-router.delete("/:id",isLoggin,deleteCategories)
-router.put("/:id",isLoggin,updateCategories)
+// router.get("/", get);
+router.get("/", get_all_category);
+router.post("/", isLoggin, create_category);
+router.delete("/:id",isLoggin,delete_category);
+router.put("/:id",isLoggin,update_category);
 
 
 module.exports = router;

@@ -5,8 +5,8 @@ const Category =require("../model/Category")
 //@desc  Create a category
 //@route POST /api/v1/categories
 //@access Private
-exports.createCategory=asyncHandler(async(req,res)=>{
-  const {name,author}=req.body;
+exports.create_category=asyncHandler(async(req,res)=>{
+  const {name}=req.body;
 
   const categoryFound=await Category.findOne({name});
   if(categoryFound){
@@ -27,7 +27,7 @@ exports.createCategory=asyncHandler(async(req,res)=>{
 //@desc  Get all Categories
 //@route GET /api/v1/categories
 //@access PUBLIC
-exports.getCategories=asyncHandler(async(req,res)=>{
+exports.get_all_category=asyncHandler(async(req,res)=>{
   const categories =await Category.find({}).populate({path:"posts",model:"Post",})
   res.status(201).json(
     {
@@ -39,7 +39,7 @@ exports.getCategories=asyncHandler(async(req,res)=>{
 //@desc  Delete Category
 //@route DELETE /api/v1/categories/:id
 //@access Private
-exports.deleteCategories=asyncHandler(async(req,res)=>{
+exports.delete_category=asyncHandler(async(req,res)=>{
   const category =await Category.findByIdAndDelete(req.params.id);
   res.status(201).json({
     status: "success",
@@ -50,7 +50,7 @@ exports.deleteCategories=asyncHandler(async(req,res)=>{
 //@desc  update Category
 //@route PUT /api/v1/categories/:id
 //@access Private
-exports.updateCategories=asyncHandler(async(req,res)=>{
+exports.update_category=asyncHandler(async(req,res)=>{
 const category = await Category.findByIdAndUpdate(req.params.id,
   {name:req.body.name},
   {
@@ -66,7 +66,7 @@ const category = await Category.findByIdAndUpdate(req.params.id,
     })
 })
 
-exports.get = async (req, res) => {
+exports.get1 = async (req, res) => {
   try {
     console.log("get Category");
     res.send({ message: "Category GEt" });
