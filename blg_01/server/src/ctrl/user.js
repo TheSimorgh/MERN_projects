@@ -8,7 +8,8 @@ const User = require("../model/User");
 //@access public
 
 exports.register = asyncHandler(async (req, res) => {
-  //get the details
+
+    //get the details
   const { username, password, email } = req.body;
   //! Check if user exists
   const user = await User.findOne({ username });
@@ -36,6 +37,8 @@ exports.register = asyncHandler(async (req, res) => {
     // role: newUser?.role,
     newUser,
   });
+
+
 });
 
 //@desc Login  user
@@ -69,12 +72,14 @@ exports.login = asyncHandler(async (req, res) => {
   });
 });
 
-exports.getProfile = async (req, res) => {
+exports.getProfile = async (req, res,next) => {
   try {
     const user = await User.findById(req.params.id)
     res.send({ message: "getProfile" ,user});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    // res.status(500).json({ message: error.message });
+    console.log(error);
+    next(error)
   }
 };
 

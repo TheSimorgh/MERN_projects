@@ -6,6 +6,7 @@ const globalErrHandler = (err, req, res, next) => {
     status,
     message,
     stack,
+    custom:"globalErrHandler"
   });
 };
 
