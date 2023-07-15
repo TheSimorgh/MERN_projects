@@ -72,6 +72,41 @@ exports.login = asyncHandler(async (req, res) => {
   });
 });
 
+
+//@desc   Block user
+//@route  PUT /api/v1/users/block/:userIdToBlock
+//@access Private
+
+exports.block_user = asyncHandler(async (req, res) => {
+
+  //* Find the user to be blocked
+  const userIdToBlock = req.params.userIdToBlock;
+  const userToBlock = await User.findById(userIdToBlock);
+  if (!userToBlock) {
+    throw new Error("User to block not found");
+  }
+  // ! user who is blocking
+  const userBlocking = req.userAuth._id;
+  // check if user is blocking him/herself
+  if (userIdToBlock.toString() === userBlocking.toString()) {
+    throw new Error("Cannot block yourself");
+  }
+  //find the current user
+  const currentUser = await User.findById(userBlocking);
+  //? Check if user already blocked
+  if (currentUser?.blockedUsers?.includes(userIdToBlock)) {
+    throw new Error("User already blocked");
+  }
+  //push the user to be blocked in the array of the current user
+  currentUser.blockedUsers.push(userIdToBlock);
+  await currentUser.save();
+  res.json({
+    message: "User blocked successfully",
+    status: "success",
+  });
+});
+
+
 exports.getProfile = async (req, res,next) => {
   try {
     const user = await User.findById(req.params.id)

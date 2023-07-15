@@ -24,8 +24,16 @@ exports.get_all_post = asyncHandler(async (req, res) => {
 //@access PUBLIC
 exports.get_one_post = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
-    .populate("author")
-    .populate("category");
+  .populate("author")
+  .populate("category")
+  .populate({
+    path: "comments",
+    model: "Comment",
+    populate: {
+      path: "author",
+      select: "username",
+    },
+  });
 
   res.status(201).json({
     status: "success",
