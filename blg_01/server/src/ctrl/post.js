@@ -24,16 +24,16 @@ exports.get_all_post = asyncHandler(async (req, res) => {
 //@access PUBLIC
 exports.get_one_post = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
-  .populate("author")
-  .populate("category")
-  .populate({
-    path: "comments",
-    model: "Comment",
-    populate: {
-      path: "author",
-      select: "username",
-    },
-  });
+    .populate("author")
+    .populate("category")
+    .populate({
+      path: "comments",
+      model: "Comment",
+      populate: {
+        path: "author",
+        select: "username",
+      },
+    });
 
   res.status(201).json({
     status: "success",
@@ -104,8 +104,8 @@ exports.update_post = asyncHandler(async (req, res) => {
   if (!postFound) {
     throw new Error("Post not found");
   }
- //! image update
- const { title, category, content } = req.body;
+  //! image update
+  const { title, category, content } = req.body;
   const post = await Post.findByIdAndUpdate(
     id,
     {
@@ -128,15 +128,76 @@ exports.update_post = asyncHandler(async (req, res) => {
 
 exports.delete_post = asyncHandler(async (req, res) => {
   const postFound = await Post.findById(req.params.id);
-  const isAuthor = req.userAuth?._id?.toString() === postFound?.author?._id?.toString();
+  const isAuthor =
+    req.userAuth?._id?.toString() === postFound?.author?._id?.toString();
   console.log(isAuthor);
-  if (!isAuthor) throw new Error("Action denied, you are not the creator of this post");
-   await Post.findByIdAndDelete(req.params.id);
+  if (!isAuthor)
+    throw new Error("Action denied, you are not the creator of this post");
+  await Post.findByIdAndDelete(req.params.id);
   res.status(201).json({
     status: "success",
     message: "Post successfully deleted",
     deleted_post: postFound,
   });
+});
+
+//@desc   liking a Post
+//@route  PUT /api/v1/posts/likes/:id
+//@access Private
+
+exports.like_post = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const user_id = req.userAuth._id;
+  const post = await Post.findById(id);
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  await Post.findByIdAndUpdate(
+    id,
+    {
+      $addToSet: { likes: userId },
+    },
+    { new: true }
+  );
+  // Remove the user from the dislikes array if present
+  post.dislikes = post.dislikes.filter(
+    (dislike) => dislike.toString() !== userId.toString()
+  );
+  //resave the post
+  await post.save();
+  res.status(200).json({ message: "Post liked successfully.", post });
+});
+
+//@desc   disliking a Post
+//@route  PUT /api/v1/posts/dislikes/:id
+//@access Private
+exports.dislike_post = asyncHandler(async (req, res) => {
+  //Get the id of the post
+  const { id } = req.params;
+  //get the login user
+  const userId = req.userAuth._id;
+  //Find the post
+  const post = await Post.findById(id);
+  if (!post) {
+    throw new Error("Post not found");
+  }
+  //Push the user into post dislikes
+
+  await Post.findByIdAndUpdate(
+    id,
+    {
+      $addToSet: { dislikes: userId },
+    },
+    { new: true }
+  );
+  // Remove the user from the likes array if present
+  post.likes = post.likes.filter(
+    (like) => like.toString() !== userId.toString()
+  );
+  //resave the post
+  await post.save();
+  res.status(200).json({ message: "Post disliked successfully.", post });
 });
 
 exports.xxx = asyncHandler(async (req, res) => {
