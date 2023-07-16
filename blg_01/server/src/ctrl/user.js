@@ -133,9 +133,30 @@ exports.unblock_user = asyncHandler(async (req, res) => {
  res.json({
    status: "success",
    message: "User unblocked successfully",
+   userIdToUnBlock
  });
 });
 
+//@desc   who view my profile
+//@route  GET /api/v1/users/profile-viewer/:userProfileId
+//@access Private
+exports.profile_viewers = asyncHandler(async (req, res) => {
+  const user_profile_id=req.params.id
+  const user_profile=await User.findById(user_profile_id)
+  if(!user_profile) throw new Error ("User to view is not Found")
+
+  const current_user_id=req.userAuth._id
+  if(user_profile?.profileViewers?.includes(current_user_id)) throw new Error ("You have already viewed this profile")
+  
+  user_profile.profileViewers.push(current_user_id)
+  await user_profile.save()
+
+  res.json({
+    message: "You have successfully viewed his/her profile",
+    status: "success",
+    
+  });
+});
 
 
 exports.getProfile = async (req, res,next) => {
@@ -158,3 +179,10 @@ exports.getme = async (req, res) => {
   }
 };
 
+
+exports.xxx = asyncHandler(async (req, res) => {
+  res.status(201).json({
+    status: "success",
+    message: "xxx successfully fetched,",
+  });
+});
