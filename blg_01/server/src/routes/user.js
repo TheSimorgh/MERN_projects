@@ -1,5 +1,5 @@
 const express = require("express");
-const { register, login ,getProfile,getme, block_user,unblock_user,forgot_password, reset_password,profile_viewers,unfollowing_user,following_user} = require("../ctrl/user");
+const { register, login ,getProfile,getme, block_user,unblock_user,forgot_password, reset_password,profile_viewers,unfollowing_user,following_user, account_verification_email, account_verification} = require("../ctrl/user");
 const isLoggin = require("../middleware/isLoggin");
 const router = express.Router();
 
@@ -14,6 +14,8 @@ router.put("/following/:userToFollowId",isLoggin, following_user);
 router.put("/unfollowing/:userToUnFollowId",isLoggin, unfollowing_user);
 router.post("/reset-password/:resetToken", reset_password);
 router.post("/forgot-password", forgot_password);
+router.put("/account-verification-email", isLoggin,account_verification_email);
+router.post("/account-verification/:verifyToken", isLoggin, account_verification);
 
 forgot_password
 module.exports = router;

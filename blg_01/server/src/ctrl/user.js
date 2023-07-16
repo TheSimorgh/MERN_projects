@@ -8,8 +8,7 @@ const User = require("../model/User");
 //@access public
 
 exports.register = asyncHandler(async (req, res) => {
-
-    //get the details
+  //get the details
   const { username, password, email } = req.body;
   //! Check if user exists
   const user = await User.findOne({ username });
@@ -37,8 +36,6 @@ exports.register = asyncHandler(async (req, res) => {
     // role: newUser?.role,
     newUser,
   });
-
-
 });
 
 //@desc Login  user
@@ -72,13 +69,11 @@ exports.login = asyncHandler(async (req, res) => {
   });
 });
 
-
 //@desc   Block user
 //@route  PUT /api/v1/users/block/:userIdToBlock
 //@access Private
 
 exports.block_user = asyncHandler(async (req, res) => {
-
   //* Find the user to be blocked
   const userIdToBlock = req.params.userIdToBlock;
   const userToBlock = await User.findById(userIdToBlock);
@@ -110,78 +105,74 @@ exports.block_user = asyncHandler(async (req, res) => {
 //@route  PUT /api/v1/users/unblock/:userIdToUnBlock
 //@access Private
 exports.unblock_user = asyncHandler(async (req, res) => {
- //* Find the user to be unblocked
- const userIdToUnBlock = req.params.userIdToUnBlock;
- const userToUnBlock = await User.findById(userIdToUnBlock);
- if (!userToUnBlock) {
-   throw new Error("User to be unblock not found");
- }
- //find the current user
- const userUnBlocking = req.userAuth._id;
- const currentUser = await User.findById(userUnBlocking);
+  //* Find the user to be unblocked
+  const userIdToUnBlock = req.params.userIdToUnBlock;
+  const userToUnBlock = await User.findById(userIdToUnBlock);
+  if (!userToUnBlock) {
+    throw new Error("User to be unblock not found");
+  }
+  //find the current user
+  const userUnBlocking = req.userAuth._id;
+  const currentUser = await User.findById(userUnBlocking);
 
- //check if user is blocked before unblocking
- if (!currentUser.blockedUsers.includes(userIdToUnBlock)) {
-   throw new Error("User not block");
- }
- //remove the user from the current user blocked users array
- currentUser.blockedUsers = currentUser.blockedUsers.filter(
-   (id) => id.toString() !== userIdToUnBlock.toString()
- );
- //resave the current user
- await currentUser.save();
- res.json({
-   status: "success",
-   message: "User unblocked successfully",
-   userIdToUnBlock
- });
+  //check if user is blocked before unblocking
+  if (!currentUser.blockedUsers.includes(userIdToUnBlock)) {
+    throw new Error("User not block");
+  }
+  //remove the user from the current user blocked users array
+  currentUser.blockedUsers = currentUser.blockedUsers.filter(
+    (id) => id.toString() !== userIdToUnBlock.toString()
+  );
+  //resave the current user
+  await currentUser.save();
+  res.json({
+    status: "success",
+    message: "User unblocked successfully",
+    userIdToUnBlock,
+  });
 });
 
 //@desc   who view my profile
 //@route  GET /api/v1/users/profile-viewer/:userProfileId
 //@access Private
 exports.profile_viewers = asyncHandler(async (req, res) => {
-  const user_profile_id=req.params.userProfileId
-  const user_profile=await User.findById(user_profile_id)
-  if(!user_profile) throw new Error ("User to view is not Found")
-  
-  const current_user_id=req.userAuth._id
-  if(user_profile?.profileViewers?.includes(current_user_id)) throw new Error ("You have already viewed this profile")
-  
-  user_profile.profileViewers.push(current_user_id)
-  await user_profile.save()
+  const user_profile_id = req.params.userProfileId;
+  const user_profile = await User.findById(user_profile_id);
+  if (!user_profile) throw new Error("User to view is not Found");
+
+  const current_user_id = req.userAuth._id;
+  if (user_profile?.profileViewers?.includes(current_user_id))
+    throw new Error("You have already viewed this profile");
+
+  user_profile.profileViewers.push(current_user_id);
+  await user_profile.save();
 
   res.json({
     message: "You have successfully viewed his/her profile",
     status: "success",
-    
   });
 });
 
-
-exports.getProfile = async (req, res,next) => {
+exports.getProfile = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id)
-    res.send({ message: "getProfile" ,user});
+    const user = await User.findById(req.params.id);
+    res.send({ message: "getProfile", user });
   } catch (error) {
     // res.status(500).json({ message: error.message });
     console.log(error);
-    next(error)
+    next(error);
   }
 };
-
-
 
 //@desc   Follwing user
 //@route  PUT /api/v1/users/following/:userIdToFollow
 //@access Private
 exports.following_user = asyncHandler(async (req, res) => {
-  
-  const following_user_id=req.params.userToFollowId;
-  const current_user_id=req.userAuth._id
-  if (current_user_id.toString() === following_user_id.toString()) {throw new Error("Cannot Follow yourself"); }
-
-
+  const following_user_id = req.params.userToFollowId;
+  const current_user_id = req.userAuth._id;
+  if (current_user_id.toString() === following_user_id.toString()) {
+    throw new Error("Cannot Follow yourself");
+  }
 
   await User.findByIdAndUpdate(
     current_user_id,
@@ -189,9 +180,9 @@ exports.following_user = asyncHandler(async (req, res) => {
       $addToSet: { following: following_user_id },
     },
     {
-      new:true
+      new: true,
     }
-  )
+  );
 
   await User.findByIdAndUpdate(
     following_user_id,
@@ -199,33 +190,30 @@ exports.following_user = asyncHandler(async (req, res) => {
       $addToSet: { followers: current_user_id },
     },
     {
-      new:true
+      new: true,
     }
-  )
+  );
 
   res.json({
     status: "success",
     message: "You have followed the user successfully",
   });
-  const following_user =await User.findById(userToFollowId)
-  if(!following_user) throw new Error ("User to follow is not Found")
+  const following_user = await User.findById(userToFollowId);
+  if (!following_user) throw new Error("User to follow is not Found");
 
-
-  if(current_user.following.include(following_user)) throw new Error ("You have already following")
-
+  if (current_user.following.include(following_user))
+    throw new Error("You have already following");
 });
-
-
 
 //@desc   UnFollwing user
 //@route  PUT /api/v1/users/unfollowing/:userIdToUnFollow
 //@access Private
 exports.unfollowing_user = asyncHandler(async (req, res) => {
-  const unfollowing_user_id=req.params.userToUnFollowId;
-  const current_user_id=req.userAuth._id
-  if (current_user_id.toString() === unfollowing_user_id.toString()) {throw new Error("Cannot unFollow yourself"); }
-
-
+  const unfollowing_user_id = req.params.userToUnFollowId;
+  const current_user_id = req.userAuth._id;
+  if (current_user_id.toString() === unfollowing_user_id.toString()) {
+    throw new Error("Cannot unFollow yourself");
+  }
 
   await User.findByIdAndUpdate(
     current_user_id,
@@ -233,9 +221,9 @@ exports.unfollowing_user = asyncHandler(async (req, res) => {
       $pull: { following: unfollowing_user_id },
     },
     {
-      new:true
+      new: true,
     }
-  )
+  );
 
   await User.findByIdAndUpdate(
     unfollowing_user_id,
@@ -243,14 +231,33 @@ exports.unfollowing_user = asyncHandler(async (req, res) => {
       $pull: { followers: current_user_id },
     },
     {
-      new:true
+      new: true,
     }
-  )
+  );
 
   res.json({
     status: "success",
     message: "You have followed the user successfully",
   });
+});
+
+// @route   POST /api/v1/users/forgot-password
+// @desc   Forgot password
+// @access  Public
+exports.forgot_password = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const userFound = await User.findOne({ email });
+  if (!userFound) {
+    throw new Error("There's No Email In Our System");
+  }
+
+  //Create token
+  const resetToken = await userFound.generatePasswordResetToken();
+  //resave the user
+  await userFound.save();
+  //send email
+  sendEmail(email, resetToken);
+  res.status(200).json({ message: "Password reset email sent", resetToken });
 });
 
 // @route   POST /api/v1/users/reset-password/:resetToken
@@ -281,43 +288,65 @@ exports.reset_password = asyncHandler(async (req, res) => {
   //resave the user
   await userFound.save();
   res.status(200).json({ message: "Password reset successfully" });
-  
 });
 
+// @route   POST /api/v1/users/account-verification-email/
+// @desc    Send Account verification email
+// @access  Private
 
-// @route   POST /api/v1/users/forgot-password
-// @desc   Forgot password
-// @access  Public
-exports.forgot_password = asyncHandler(async (req, res) => {
-
-  const { email } = req.body;
-  const userFound = await User.findOne({ email });
-  if (!userFound) {
-    throw new Error("There's No Email In Our System");
+exports.account_verification_email = asyncHandler(async (req, res) => {
+  //Find the login user email
+  const user = await User.findById(req?.userAuth?._id);
+  if (!user) {
+    throw new Error("User not found");
   }
-
-    //Create token
-    const resetToken = await userFound.generatePasswordResetToken();
-    //resave the user
-    await userFound.save();
-      //send email
-  sendEmail(email, resetToken);
-  res.status(200).json({ message: "Password reset email sent", resetToken });
-
+  //send the token
+  const token = await user.generateAccVerificationToken();
+  //resave
+  await user.save();
+  //send the email
+  sendAccVerificationEmail(user?.email, token);
+  res.status(200).json({
+    message: `Account verification email sent ${user?.email}`,
+  });
 });
 
-
-
+// @route   POST /api/v1/users/verify-account/:verifyToken
+// @desc    Verify token
+// @access  Private
+exports.account_verification = asyncHandler(async (req, res) => {
+  //Get the id/token params
+  const { verifyToken } = req.params;
+  //Convert the token to actual token that has been saved in the db
+  const cryptoToken = crypto
+    .createHash("sha256")
+    .update(verifyToken)
+    .digest("hex");
+  //find the user by the crypto token
+  const userFound = await User.findOne({
+    accountVerificationToken: cryptoToken,
+    accountVerificationExpires: { $gt: Date.now() },
+  });
+  if (!userFound) {
+    throw new Error("Account verification  token is invalid or has expired");
+  }
+  //Update user account
+  userFound.isVerified = true;
+  userFound.accountVerificationExpires = undefined;
+  userFound.accountVerificationToken = undefined;
+  //resave the user
+  await userFound.save();
+  res.status(200).json({ message: "Account  successfully verified" });
+});
 
 exports.getme = async (req, res) => {
   try {
-    const user = await User.findById(req.userAuth._id)
-    res.send({ message: "getProfile" ,user});
+    const user = await User.findById(req.userAuth._id);
+    res.send({ message: "getProfile", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.xxx = asyncHandler(async (req, res) => {
   res.status(201).json({
