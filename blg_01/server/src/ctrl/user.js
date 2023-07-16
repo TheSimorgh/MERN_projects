@@ -144,7 +144,7 @@ exports.profile_viewers = asyncHandler(async (req, res) => {
   const user_profile_id=req.params.id
   const user_profile=await User.findById(user_profile_id)
   if(!user_profile) throw new Error ("User to view is not Found")
-
+  
   const current_user_id=req.userAuth._id
   if(user_profile?.profileViewers?.includes(current_user_id)) throw new Error ("You have already viewed this profile")
   
@@ -169,6 +169,92 @@ exports.getProfile = async (req, res,next) => {
     next(error)
   }
 };
+
+
+
+//@desc   Follwing user
+//@route  PUT /api/v1/users/following/:userIdToFollow
+//@access Private
+exports.following_user = asyncHandler(async (req, res) => {
+  
+  const following_user_id=req.params.userToFollowId;
+  const current_user_id=req.userAuth._id
+  if (current_user_id.toString() === following_user_id.toString()) {throw new Error("Cannot Follow yourself"); }
+
+
+
+  await User.findByIdAndUpdate(
+    current_user_id,
+    {
+      $addToSet: { following: following_user_id },
+    },
+    {
+      new:true
+    }
+  )
+
+  await User.findByIdAndUpdate(
+    following_user_id,
+    {
+      $addToSet: { followers: current_user_id },
+    },
+    {
+      new:true
+    }
+  )
+
+  res.json({
+    status: "success",
+    message: "You have followed the user successfully",
+  });
+  const following_user =await User.findById(userToFollowId)
+  if(!following_user) throw new Error ("User to follow is not Found")
+
+
+  if(current_user.following.include(following_user)) throw new Error ("You have already following")
+
+});
+
+
+
+//@desc   UnFollwing user
+//@route  PUT /api/v1/users/unfollowing/:userIdToUnFollow
+//@access Private
+exports.unfollowing_user = asyncHandler(async (req, res) => {
+  const unfollowing_user_id=req.params.userToUnFollowId;
+  const current_user_id=req.userAuth._id
+  if (current_user_id.toString() === unfollowing_user_id.toString()) {throw new Error("Cannot Follow yourself"); }
+
+
+
+  await User.findByIdAndUpdate(
+    current_user_id,
+    {
+      $pull: { following: unfollowing_user_id },
+    },
+    {
+      new:true
+    }
+  )
+
+  await User.findByIdAndUpdate(
+    unfollowing_user_id,
+    {
+      $pull: { followers: current_user_id },
+    },
+    {
+      new:true
+    }
+  )
+
+  res.json({
+    status: "success",
+    message: "You have followed the user successfully",
+  });
+});
+
+
+
 
 exports.getme = async (req, res) => {
   try {
