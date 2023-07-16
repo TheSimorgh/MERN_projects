@@ -7,10 +7,13 @@ const connectDB = require("./src/config/database");
 mongoose.set("strictQuery", true);
 const routes =require("./src/routes/index.js");
 const { notFound, globalErrHandler } = require("./src/middleware/globalErrorHandler");
+const sendEmail = require("./src/utils/sendEmail");
+const { sendResetCode } = require("./src/utils/mailer");
 const app = express();
 // const http = require("http");
 // const { readdirSync } = require("fs");
-
+// sendEmail("kainorling","11")
+// sendResetCode("kainorling","sss","dsdsds")
 //middlewares
 app.use(express.json()); //Pass incoming data
 // app.use(cookieParser());
