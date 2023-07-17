@@ -3,6 +3,9 @@ const crypto = require("crypto");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 const User = require("../model/User");
+const storage = require("../utils/fileUpload");
+const multer = require("multer");
+
 //@desc Register a new user
 //@route POST /api/v1/users/register
 //@access public
@@ -20,6 +23,7 @@ exports.register = asyncHandler(async (req, res) => {
     username,
     email,
     password,
+    profilePicture:req?.file?.path,
   });
 
   //! hash password
@@ -412,3 +416,18 @@ exports.xxx = asyncHandler(async (req, res) => {
     message: "xxx successfully fetched,",
   });
 });
+
+exports.upload_profile_img = asyncHandler(async (req, res) => {
+  res.status(201).json({
+    status: "success",
+    message: "xxx successfully fetched,",
+  });
+});
+exports.upload_cover_img = asyncHandler(async (req, res) => {
+  res.status(201).json({
+    status: "success",
+    message: "xxx successfully fetched,",
+  });
+});
+
+

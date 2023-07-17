@@ -2,6 +2,8 @@ const Post = require("../model/Post");
 const User = require("../model/User");
 const Category = require("../model/Category");
 const asyncHandler = require("express-async-handler");
+const storage = require("../utils/fileUpload");
+const multer = require("multer");
 
 //@desc  Get only 4 posts
 //@route GET /api/v1/posts
@@ -63,6 +65,7 @@ exports.get_one_post = asyncHandler(async (req, res) => {
 //@route POST /api/v1/posts
 //@access Private
 exports.create_post = asyncHandler(async (req, res) => {
+  console.log(req.file);
   //! Find the user/chec if user account is verified
   const userFound = await User.findById(req?.userAuth?._id);
   if (!userFound) {
@@ -84,6 +87,7 @@ exports.create_post = asyncHandler(async (req, res) => {
     content,
     category: categoryId,
     author: req?.userAuth?._id,
+    image: req?.file?.path,
   });
   //!Associate post to user
   await User.findByIdAndUpdate(
