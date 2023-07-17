@@ -1,0 +1,17 @@
+export {default as AccountVerification} from "./account_verification/AccountVerification";
+export {default as AddPost} from "./add_post/AddPost";
+export {default as Home} from "./home/Home";
+export {default as Login} from "./login/Login";
+export {default as PasswordReset} from "./password_reset/PasswordReset";
+export {default as PasswordResetReq} from "./password_reset_req/PasswordResetReq";
+export {default as PostDetails} from "./post_details/PostDetails";
+export {default as PostLists} from "./post_lists/PostLists";
+export {default as PrivateUserProf} from "./private_user_prof/PrivateUserProf";
+export {default as PublicUserProf} from "./public_user_prof/PublicUserProf";
+export {default as Register} from "./register/Register";
+export {default as SchedulePost} from "./schedule_post/SchedulePost";
+export {default as UpdatePost} from "./update_post/UpdatePost";
+export {default as UpdateUser} from "./update_user/UpdateUser"
+export {default as UploadCoverImg} from "./upload_cover_img/UploadCoverImg";
+export {default as UploadProfImg} from "./upload_profi_img/UploadProfImg";
+export {default as NotFound} from "./not_found/NotFound";
