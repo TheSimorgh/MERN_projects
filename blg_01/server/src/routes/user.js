@@ -1,12 +1,12 @@
 const express = require("express");
-const { register, login ,getProfile,getme, block_user,unblock_user,forgot_password, reset_password,profile_viewers,unfollowing_user,following_user, account_verification_email, account_verification} = require("../ctrl/user");
+const { register, login ,getme,get_pub_profile, block_user,unblock_user,forgot_password, reset_password,profile_viewers,unfollowing_user,following_user, account_verification_email, account_verification, get_my_profile} = require("../ctrl/user");
 const isLoggin = require("../middleware/isLoggin");
 const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
-router.get("/profile/:id",isLoggin, getProfile);
-router.get("/profile1/",isLoggin, getme);
+router.get("/profile/:id", get_pub_profile);
+router.get("/profile/",isLoggin, get_my_profile);
 router.put("/block/:userIdToBlock",isLoggin, block_user);
 router.put("/unblock/:userIdToUnBlock",isLoggin, unblock_user);
 router.get("/profile-viewer/:userProfileId",isLoggin, profile_viewers);

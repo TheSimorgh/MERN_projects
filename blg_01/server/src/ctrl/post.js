@@ -7,15 +7,32 @@ const asyncHandler = require("express-async-handler");
 //@route GET /api/v1/posts
 //@access PUBLIC
 exports.get_all_post = asyncHandler(async (req, res) => {
-  const allPost = await Post.find()
-    .sort({ createdAt: -1 })
-    .limit(4)
-    .populate("category");
 
+    // !find all users who have blocked the logged-in user
+  const loggedin_user=req.userAuth?._id
+  const users_blocking_loggedin_user=await User.find({blockedUsers:loggedin_user})
+  console.log(users_blocking_loggedin_user);
+  const currentTime = new Date();
+   // Extract the IDs of users who have blocked the logged-in user
+  const blocking_users_ids=users_blocking_loggedin_user?.map(user=>user?._id)
+   //query
+   let query = {
+    author: { $nin: blocking_users_ids },
+    $or: [
+      {
+        shedduledPublished: { $lte: currentTime },
+        shedduledPublished: null,
+      },
+    ],
+  };
+  const all_post = await Post.find(query)
+    .sort({ createdAt: -1 })
+    .populate("category");
+        // .limit(4)
   res.status(201).json({
     status: "success",
     message: "Post successfully fetched,",
-    allPost,
+    all_post,
   });
 });
 
@@ -228,7 +245,7 @@ exports.claps = asyncHandler(async (req, res) => {
 //@route  PUT /api/v1/posts/schedule/:postId
 //@access Private
 
-exports.schedule = expressAsyncHandler(async (req, res) => {
+exports.schedule = asyncHandler(async (req, res) => {
   //get the payload
   const { scheduledPublish } = req.body;
   const { postId } = req.params;

@@ -12,7 +12,7 @@ router.put("/:id", isLoggin,update_post);
 router.put("/likes/:id", isLoggin, like_post);
 router.put("/dislikes/:id", isLoggin,dislike_post);
 router.put("/claps",isLoggin,claps)
-router.post("/schedule:postId",isLoggin,schedule)
+router.put("/schedule:postId",isLoggin,schedule)
 
 schedule
 module.exports = router;

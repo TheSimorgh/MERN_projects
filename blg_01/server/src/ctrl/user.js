@@ -153,16 +153,74 @@ exports.profile_viewers = asyncHandler(async (req, res) => {
   });
 });
 
-exports.getProfile = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.id);
-    res.send({ message: "getProfile", user });
-  } catch (error) {
-    // res.status(500).json({ message: error.message });
-    console.log(error);
-    next(error);
-  }
-};
+// exports.get_my_profile = async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.userAuth._id);
+//     res.send({ message: "get myself", user });
+//   } catch (error) {
+//     // res.status(500).json({ message: error.message });
+//     console.log(error);
+//     next(error);
+//   }
+// };
+
+//@desc   Get my profile
+//@route  GET /api/v1/users/profile/
+//@access Private
+exports.get_my_profile = asyncHandler(async (req, res) => {
+   //! get user id from params
+  const id = req.userAuth._id;
+  const user = await User.findById(id)
+    .populate({
+      path: "posts",
+      model: "Post",
+    })
+    .populate({
+      path: "following",
+      model: "User",
+    })
+    .populate({
+      path: "followers",
+      model: "User",
+    })
+    .populate({
+      path: "blockedUsers",
+      model: "User",
+    })
+    .populate({
+      path: "profileViewers",
+      model: "User",
+    });
+  res.json({
+    status: "success",
+    message: "Profile fetched",
+    user,
+  });
+
+});
+
+//@desc  Get profile
+//@route GET /api/v1/users/profile/
+//@access Private
+
+exports.get_pub_profile = asyncHandler(async (req, res, next) => {
+  //! get user id from params
+  const userId = req.params.userId;
+  const user = await User.findById(userId)
+    .select("-password")
+    .populate({
+      path: "posts",
+      populate: {
+        path: "category",
+      },
+    });
+  res.json({
+    status: "success",
+    message: "Public Profile fetched",
+    user,
+  });
+});
+
 
 //@desc   Follwing user
 //@route  PUT /api/v1/users/following/:userIdToFollow
