@@ -1,0 +1,6 @@
+npm i @reduxjs/toolkit react-select @heroicons/react @headlessui/react sweetalert2 moment axios react-icons react-redux react-router-dom 
+
+npx tailwindcss init
+npm install -D tailwindcss
+
+install postcss-flexbugs-fixes postcss-normalize postcss-preset-env

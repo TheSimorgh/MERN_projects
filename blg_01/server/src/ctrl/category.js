@@ -2,6 +2,7 @@
 const asyncHandler = require("express-async-handler");
 const Category =require("../model/Category")
 const storage = require("../utils/fileUpload");
+const multer = require("multer");
 
 //@desc  Create a category
 //@route POST /api/v1/categories
