@@ -1,6 +1,18 @@
+import { useSelector } from "react-redux";
 import { Register } from "../../cmps";
+import { useEffect, useState } from "react";
 
 const Home = () => {
+  // const user = JSON.parse();
+  // const { data, setData } = useState(localStorage.getItem("userInfo") ? localStorage.getItem("userInfo"):null);
+  // console.log("user");
+  // console.log(data);
+  // useEffect(() => {
+  //   const info = localStorage.getItem("userInfo");
+  //   if (info !== null) setData(JSON.parse(data));
+  // }, [data]);
+
+  
   return (
     <div>
       <section
@@ -74,7 +86,7 @@ const Home = () => {
                 </ul>
               </div>
               {/* Register Form */}
-             <Register />
+              <Register />
             </div>
           </div>
         </div>
@@ -83,6 +95,6 @@ const Home = () => {
       {/* <HomePostsLists /> */}
     </div>
   );
-}
+};
 
-export default Home
+export default Home;

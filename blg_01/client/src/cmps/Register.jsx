@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Link } from "react-router-dom";
+import { register } from "../redux/features/userSlice";
+import {useDispatch,useSelector}from"react-redux"
 
 const Register = () => {
+  const dispatch=useDispatch()
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,6 +21,9 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // reset form
+    dispatch(register(formData))
+    // dispatch(registerAction({email:formData.password,username:formData.username,password:formData.password}))
+
     setFormData({
       email: "",
       password: "",
@@ -25,12 +32,12 @@ const Register = () => {
   };
 
   return (
-    <form className="w-full lg:w-1/2">
+    <form className="w-full lg:w-1/2" onSubmit={handleSubmit}>
       <div className="flex flex-col items-center p-10 xl:px-24 xl:pb-12 bg-white lg:max-w-xl lg:ml-auto rounded-4xl shadow-2xl">
         <img
           className="relative -top-2 -mt-16 mb-6 h-16"
           src="flex-ui-assets/logos/flex-circle-green.svg"
-          alt
+          alt=""
         />
         <h2 className="mb-4 text-2xl md:text-3xl text-coolGray-900 font-bold text-center">
           Join our community
