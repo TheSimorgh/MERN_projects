@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
+import { reset_success_action } from "../../../redux/features/globalSlice";
 
 const SuccesMsg = ({ message }) => {
   const dispatch = useDispatch();
@@ -9,7 +10,7 @@ const SuccesMsg = ({ message }) => {
     title: "Good Job",
     text: message,
   });
-  // dispatch(console.log("1"));
+   dispatch(reset_success_action());
 };
 
 export default SuccesMsg;

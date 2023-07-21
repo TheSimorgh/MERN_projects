@@ -7,6 +7,7 @@ import {
 import axios from "axios";
 import { BASE_URL } from "../../App";
 import Cookies from "js-cookie";
+import { reset_error_action, reset_success_action } from "./globalSlice";
 
 
 // Get user from localStorage
@@ -153,6 +154,16 @@ const userSlice = createSlice({
   //   state.isLogin = false;
   //   state.success=false;
   // });
+
+
+    //! Reset error action
+    builder.addCase(reset_error_action.fulfilled, (state) => {
+      state.error = null;
+    });
+    //! Reset success action
+    builder.addCase(reset_success_action.fulfilled, (state) => {
+      state.success = false;
+    });
   },
 
 

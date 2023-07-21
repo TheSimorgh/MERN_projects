@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
+import { reset_error_action } from "../../../redux/features/globalSlice";
 const ErrorMsg = ({ message }) => {
   const dispatch = useDispatch();
   Swal.fire({
@@ -8,7 +9,7 @@ const ErrorMsg = ({ message }) => {
     title: "Oops",
     text: message,
   });
-  // dispatch(console.log("1"));
+dispatch(reset_error_action());
 };
 
 export default ErrorMsg;
