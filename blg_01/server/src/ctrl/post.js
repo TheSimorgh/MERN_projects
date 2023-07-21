@@ -5,21 +5,27 @@ const asyncHandler = require("express-async-handler");
 const storage = require("../utils/fileUpload");
 const multer = require("multer");
 
-//@desc  Get only 4 posts
-//@route GET /api/v1/posts
-//@access PUBLIC
-exports.get_all_post = asyncHandler(async (req, res) => {
 
-    // !find all users who have blocked the logged-in user
-  const loggedin_user=req.userAuth?._id
-  const users_blocking_loggedin_user=await User.find({blockedUsers:loggedin_user})
-  console.log(users_blocking_loggedin_user);
+//@desc  Get all posts
+//@route GET /api/v1/posts
+//@access Private
+
+exports.get_all_post = asyncHandler(async (req, res) => {
+  // !find all users who have blocked the logged-in user
+  const loggedInUserId = req.userAuth?._id;
+  //get current time
   const currentTime = new Date();
-   // Extract the IDs of users who have blocked the logged-in user
-  const blocking_users_ids=users_blocking_loggedin_user?.map(user=>user?._id)
-   //query
-   let query = {
-    author: { $nin: blocking_users_ids },
+  const usersBlockingLoggedInuser = await User.find({
+    blockedUsers: loggedInUserId,
+  });
+  // Extract the IDs of users who have blocked the logged-in user
+  const blockingUsersIds = usersBlockingLoggedInuser?.map((user) => user?._id);
+  //! Get the category, searchterm from request
+  const category = req.query.category;
+  const searchTerm = req.query.searchTerm;
+  //query
+  let query = {
+    author: { $nin: blockingUsersIds },
     $or: [
       {
         shedduledPublished: { $lte: currentTime },
@@ -27,14 +33,67 @@ exports.get_all_post = asyncHandler(async (req, res) => {
       },
     ],
   };
-  const all_post = await Post.find(query)
-    .sort({ createdAt: -1 })
-    .populate("category");
-        // .limit(4)
+  //! check if category/searchterm is specified, then add to the query
+  if (category) {
+    query.category = category;
+  }
+  if (searchTerm) {
+    query.title = { $regex: searchTerm, $options: "i" };
+  }
+  //Pagination parameters from request
+
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 5;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const total = await Post.countDocuments(query);
+
+  const posts = await Post.find(query)
+    .populate({
+      path: "author",
+      model: "User",
+      select: "email role username",
+    })
+    .populate("category")
+    .skip(startIndex)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+  // Pagination result
+  const pagination = {};
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+
   res.status(201).json({
     status: "success",
-    message: "Post successfully fetched,",
-    all_post,
+    message: "Posts successfully fetched",
+    pagination,
+    posts,
+  });
+});
+
+//@desc  Get only 4 posts
+//@route GET /api/v1/posts
+//@access PUBLIC
+exports.get_pub_posts = asyncHandler(async (req, res) => {
+  const posts = await Post.find({})
+    .sort({ createdAt: -1 })
+    .limit(4)
+    .populate("category");
+  res.status(201).json({
+    status: "success",
+    message: "Posts successfully fetched",
+    posts,
   });
 });
 
@@ -62,7 +121,7 @@ exports.get_one_post = asyncHandler(async (req, res) => {
 });
 
 //@desc  Create a post
-//@route POST /api/v1/posts
+//@route POST /api/v1/post
 //@access Private
 exports.create_post = asyncHandler(async (req, res) => {
   console.log(req.file);
@@ -118,6 +177,10 @@ exports.create_post = asyncHandler(async (req, res) => {
     post,
   });
 });
+
+//@desc  Update Post
+//@route Update /api/v1/post/:id
+//@access Private
 exports.update_post = asyncHandler(async (req, res) => {
   //!Check if the post exists
   const { id } = req.params;
@@ -146,7 +209,9 @@ exports.update_post = asyncHandler(async (req, res) => {
     post,
   });
 });
-
+//@desc  Delete Post
+//@route DELETE /api/v1/posts/:id
+//@access Private
 exports.delete_post = asyncHandler(async (req, res) => {
   const postFound = await Post.findById(req.params.id);
   const isAuthor =
@@ -282,6 +347,28 @@ exports.schedule = asyncHandler(async (req, res) => {
   });
 });
 
+//@desc   post  view counta
+//@route  PUT /api/v1/posts/:id/post-views-count
+//@access Private
+exports.view = asyncHandler(async (req, res) => {
+
+  const {id}=req.params;
+  const userId=req.userAuth._id;
+  const post=await Post.findById(id);
+  if(!post){throw new Error("post not found")}
+  //Push thr user into post likes
+
+  await Post.findByIdAndUpdate(
+    id,
+    {
+      $addToSet: { postViews: userId },
+    },
+    { new: true }
+  ).populate("author");
+  await post.save();
+  res.status(200).json({ message: "Post liked successfully.", post });
+});
+
 
 exports.xxx = asyncHandler(async (req, res) => {
   res.status(201).json({
@@ -298,3 +385,5 @@ exports.get = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+

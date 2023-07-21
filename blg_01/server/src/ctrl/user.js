@@ -23,7 +23,7 @@ exports.register = asyncHandler(async (req, res) => {
     username,
     email,
     password,
-    profilePicture:req?.file?.path,
+    // profilePicture:req?.file?.path,
   });
 
   //! hash password
@@ -57,7 +57,7 @@ exports.login = asyncHandler(async (req, res) => {
   if (!isMatched) {
     throw new Error("Invalid login credentials");
   }
-
+  console.log("DONE login");
   //Update the last login
   user.lastLogin = new Date();
   res.json({

@@ -20,8 +20,18 @@ app.use(express.json()); //Pass incoming data
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 //cors middleware 
-app.use(cors());
+// app.use(cors());
 
+const corsOpts = {
+    // origin: "http://localhost:5173/",
+    origin: "*",
+
+    credentials: true,
+    methods: ['GET','POST','HEAD','PUT','PATCH','DELETE'],
+    allowedHeaders: ['Content-Type'],
+    exposedHeaders: ['Content-Type']
+};
+app.use(cors(corsOpts));
 
 // const server = http.createServer(app);
 //? Start the server
