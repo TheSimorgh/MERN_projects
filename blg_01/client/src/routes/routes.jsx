@@ -101,7 +101,7 @@ const routes = [
     state:"upload-cover-image"
   },
   {
-    path: "/post",
+    path: "/posts",
     element: <ProtectedPage><PostLists /> </ProtectedPage>,
     state:"post"
 

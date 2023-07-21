@@ -36,7 +36,7 @@ const navigate=useNavigate()
     dispatch(reset())
   }
 
-  // console.log(user.data);
+   console.log(user.data);
   return (
     <>
       <div className="flex h-full">
@@ -69,7 +69,7 @@ const navigate=useNavigate()
                       <div className="relative flex items-center justify-center">
                         <img
                           className="w-24 h-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
-                          src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80"
+                          src={`${user.data.profilePicture}`}
                           alt=""
                         />
                         <label
