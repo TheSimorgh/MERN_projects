@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Register } from "../../cmps";
+import { PublicPosts, Register } from "../../cmps";
 import { useEffect, useState } from "react";
 
 const Home = () => {
@@ -92,7 +92,7 @@ const Home = () => {
         </div>
       </section>
       {/* Home posts list */}
-      {/* <HomePostsLists /> */}
+  <PublicPosts />
     </div>
   );
 };

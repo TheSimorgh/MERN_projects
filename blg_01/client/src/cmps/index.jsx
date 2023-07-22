@@ -9,3 +9,5 @@ export {default as LoadingCmp} from "./global/alert/LoadingCmp";
 export {default as ErrorMsg} from "./global/alert/ErrorMsg";
 export {default as SuccessMsg} from "./global/alert/SuccessMsg";
 export {default as Warning} from "./global/alert/Warning";
+export {default as PublicPosts} from "./global/post/PublicPosts";
+

@@ -105,7 +105,7 @@ export const create_post = createAsyncThunk(
 );
 
 export const update_post = createAsyncThunk(
-  "post/create",
+  "post/update",
   async (payload, { rejectWithValue, getState, dispatch }) => {
     try {
       //convert the payload to formdata
@@ -229,209 +229,216 @@ export const schedule_post = createAsyncThunk(
   }
 );
 export const post_view = createAsyncThunk(
-    "posts/post-views",
-    async (postId, { rejectWithValue, getState, dispatch }) => {
-      //make request
-      try {
-        const token = getState().users?.userAuth?.userInfo?.token;
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const { data } = await axios.put(
-          `${BASE_URL}/post/${postId}/post-view-count`,
-          {},
-          config
-        );
-        return data;
-      } catch (error) {
-        return rejectWithValue(error?.response?.data);
-      }
+  "posts/post-views",
+  async (postId, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const token = getState().users?.userAuth?.userInfo?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/post/${postId}/post-view-count`,
+        {},
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
     }
-  );
+  }
+);
 const postSlice = createSlice({
   name: "posts",
   initialState: INITIAL_STATE,
-  reducers: { zzz: () => {} },
-  extraReducers:builder =>{
-  //fetch public posts
-  builder.addCase(get_public_posts.pending, (state, action) => {
-    state.loading = true;
-  });
-  //handle fulfilled state
-  builder.addCase(get_public_posts.fulfilled, (state, action) => {
-    state.posts = action.payload;
-    state.loading = false;
-    state.error = null;
-  });
-  //* Handle the rejection
-  builder.addCase(get_public_posts.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //fetch priavte posts
-  builder.addCase(get_private_posts.pending, (state, action) => {
-    state.loading = true;
-  });
-  //handle fulfilled state
-  builder.addCase(get_private_posts.fulfilled, (state, action) => {
-    state.posts = action.payload;
-    state.loading = false;
-    state.error = null;
-  });
-  //* Handle the rejection
-  builder.addCase(get_private_posts.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! get single post
-  builder.addCase(get_post.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(get_post.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(get_post.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! create post
-  builder.addCase(create_post.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(create_post.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.success = true;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(create_post.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
+  reducers: { zzz: (state) => 
+    state.loading=false,
+   },
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! update post
-  builder.addCase(update_post.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(update_post.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.success = true;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(update_post.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   
+  extraReducers: (builder) => {
+    //fetch public posts
+    builder.addCase(get_public_posts.pending, (state, action) => {
+      state.loading = true;
+    });
+    //handle fulfilled state
+    builder.addCase(get_public_posts.fulfilled, (state, action) => {
+      state.posts = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    //* Handle the rejection
+    builder.addCase(get_public_posts.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //fetch priavte posts
+    builder.addCase(get_private_posts.pending, (state, action) => {
+      state.loading = true;
+    });
+    //handle fulfilled state
+    builder.addCase(get_private_posts.fulfilled, (state, action) => {
+      state.posts = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    //* Handle the rejection
+    builder.addCase(get_private_posts.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! get single post
+    builder.addCase(get_post.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(get_post.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(get_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! create post
+    builder.addCase(create_post.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(create_post.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(create_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! update post
+    builder.addCase(update_post.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(update_post.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(update_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //! delete post
     builder.addCase(delete_post.pending, (state, action) => {
-        state.loading = true;
-      });
-      //handle fulfilled state
-      builder.addCase(delete_post.fulfilled, (state, action) => {
-        state.success = true;
-        state.loading = false;
-        state.error = null;
-      });
-      //* Handle the rejection
-      builder.addCase(delete_post.rejected, (state, action) => {
-        state.error = action.payload;
-        state.loading = false;
-      });
+      state.loading = true;
+    });
+    //handle fulfilled state
+    builder.addCase(delete_post.fulfilled, (state, action) => {
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    //* Handle the rejection
+    builder.addCase(delete_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
 
-      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! schedule post
-  builder.addCase(schedule_post.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(schedule_post.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.success = true;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(schedule_post.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! schedule post
+    builder.addCase(schedule_post.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(schedule_post.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(schedule_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! like post
-  builder.addCase(like_post.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(like_post.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(like_post.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! dislike post
-  builder.addCase(dislike_post.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(dislike_post.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(dislike_post.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! post view
-  builder.addCase(post_view.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(post_view.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(post_view.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! claps post
-  builder.addCase(clap_post.pending, (state, action) => {
-    state.loading = true;
-  });
-  builder.addCase(clap_post.fulfilled, (state, action) => {
-    state.post = action.payload;
-    state.loading = false;
-    state.error = null;
-  });
-  builder.addCase(clap_post.rejected, (state, action) => {
-    state.error = action.payload;
-    state.loading = false;
-  });
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! like post
+    builder.addCase(like_post.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(like_post.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(like_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! dislike post
+    builder.addCase(dislike_post.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(dislike_post.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(dislike_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! post view
+    builder.addCase(post_view.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(post_view.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(post_view.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! claps post
+    builder.addCase(clap_post.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(clap_post.fulfilled, (state, action) => {
+      state.post = action.payload;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(clap_post.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //! Reset error action
-  builder.addCase(reset_error_action.fulfilled, (state) => {
-    state.error = null;
-  });
-  //! Reset success action
-  builder.addCase(reset_success_action.fulfilled, (state) => {
-    state.success = false;
-  });
-},
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //! Reset error action
+    builder.addCase(reset_error_action.fulfilled, (state) => {
+      state.error = null;
+    });
+    //! Reset success action
+    builder.addCase(reset_success_action.fulfilled, (state) => {
+      state.success = false;
+    });
+  },
+
+
 });
 export const { reset } = postSlice.actions;
 export default postSlice.reducer;
