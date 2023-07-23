@@ -1,14 +1,9 @@
 /* eslint-disable no-unused-vars */
-import {
-  createAsyncThunk,
-  createSlice,
-  
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../../App";
 import Cookies from "js-cookie";
 import { reset_error_action, reset_success_action } from "./globalSlice";
-
 
 // Get user from localStorage
 // const user = JSON.parse(localStorage.getItem('user'))
@@ -36,8 +31,9 @@ const initialState = {
   isEmailSent: false,
   userAuth: {
     error: null,
-    userInfo:  Cookies.get("userInfo") 
-      ? JSON.parse(Cookies.get("userInfo")) : null
+    userInfo: Cookies.get("userInfo")
+      ? JSON.parse(Cookies.get("userInfo"))
+      : null,
   },
 };
 
@@ -45,20 +41,19 @@ const initialState = {
 export const login = createAsyncThunk(
   "user/login",
   async (payload, { rejectWithValue }) => {
-        try {
-      const data  = await axios.post(`${BASE_URL}/user/login`, payload);
+    try {
+      const data = await axios.post(`${BASE_URL}/user/login`, payload);
       // localStorage.setItem("userInfo", JSON.stringify(data));
       Cookies.set("userInfo", JSON.stringify(data));
       console.log(`login`);
-     console.log(data);
-    //  console.log(JSON.parse(localStorage.getItem("userInfo")));
+      console.log(data);
+      //  console.log(JSON.parse(localStorage.getItem("userInfo")));
       return data;
     } catch (error) {
       return rejectWithValue(error?.response?.data);
     }
   }
 );
-
 
 //! Register Action
 export const register = createAsyncThunk(
@@ -83,27 +78,27 @@ export const logout = createAsyncThunk("user/logout", async () => {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers:{
-    reset:(state)=>{
-      state.loading=false,
-        state.error= null,
-  state.users= [],
-  state.user=null,
-  state.success= false,
-  state.isverified= false,
-  state.isUpdated=false,
-  state.isRegistered= false,
-  state.isLogin= false,
-  state.isCoverImageUploaded= false,
-  state.isProfileImgUploaded= false,
-  state.emailMessage= undefined,
-  state.profile= {},
-  state.isEmailSent= false,
-  state.userAuth= {error: null,userInfo:  Cookies.remove("userInfo") }
-
-  }
-
-  
+  reducers: {
+    reset: (state) => {
+      (state.loading = false),
+        (state.error = null),
+        (state.users = []),
+        (state.user = null),
+        (state.success = false),
+        (state.isverified = false),
+        (state.isUpdated = false),
+        (state.isRegistered = false),
+        (state.isLogin = false),
+        (state.isCoverImageUploaded = false),
+        (state.isProfileImgUploaded = false),
+        (state.emailMessage = undefined),
+        (state.profile = {}),
+        (state.isEmailSent = false),
+        (state.userAuth = {
+          error: null,
+          userInfo: Cookies.remove("userInfo"),
+        });
+    },
   },
   extraReducers: (builder) => {
     //Login
@@ -114,14 +109,14 @@ const userSlice = createSlice({
       state.userAuth.userInfo = action.payload;
       state.isLogin = true;
       state.loading = false;
-      state.success=true;
+      state.success = true;
       state.error = null;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.error = action.payload;
       state.loading = false;
       state.isLogin = false;
-      state.success=false;
+      state.success = false;
     });
     //! Register
     builder.addCase(register.pending, (state) => {
@@ -140,21 +135,20 @@ const userSlice = createSlice({
       state.loading = false;
       state.isRegistered = false;
     });
-  //     //logout
-  // builder.addCase(logout.pending, (state) => {
-  //   state.loading = true;
-  // });
-  // builder.addCase(logout.fulfilled, (state, action) => {
-  //   state.userAuth.userInfo = action.payload;
-   
-  // });
-  // builder.addCase(logout.rejected, (state, action) => {
-  //   state.error = action.payload;
-  //   state.loading = false;
-  //   state.isLogin = false;
-  //   state.success=false;
-  // });
+    //     //logout
+    // builder.addCase(logout.pending, (state) => {
+    //   state.loading = true;
+    // });
+    // builder.addCase(logout.fulfilled, (state, action) => {
+    //   state.userAuth.userInfo = action.payload;
 
+    // });
+    // builder.addCase(logout.rejected, (state, action) => {
+    //   state.error = action.payload;
+    //   state.loading = false;
+    //   state.isLogin = false;
+    //   state.success=false;
+    // });
 
     //! Reset error action
     builder.addCase(reset_error_action.fulfilled, (state) => {
@@ -165,8 +159,6 @@ const userSlice = createSlice({
       state.success = false;
     });
   },
-
-
 
   // extraReducers:{
   //   [register.pending]: (state) => {
@@ -183,7 +175,6 @@ const userSlice = createSlice({
   //     state.loading = false;
   //     state.isRegistered = false;
   //   },
-
 
   //   [login.pending]: (state) => {
   //     state.loading = true;
@@ -204,5 +195,5 @@ const userSlice = createSlice({
 });
 
 //! generate reducer
- export const {reset} =userSlice.actions
+export const { reset } = userSlice.actions;
 export default userSlice.reducer;

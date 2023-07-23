@@ -34,8 +34,8 @@ const PublicNavbar=()=> {
                 </div>
                 <div className="flex flex-shrink-0 items-center">
                   {/* Logo here */}
-                  <Link to="/">
-                    <FaBlog className="block text-green-500 h-8 w-auto lg:hidden" />
+                  <Link to="/"className="font-bold hover:scale-150 transition-all">
+                  sem<span className="text-red-600 font-bold">urg</span>
                   </Link>
 
                   <FaBlog className="hidden text-green-500 h-8 w-auto lg:block" />

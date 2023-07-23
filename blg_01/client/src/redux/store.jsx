@@ -4,6 +4,7 @@ FLUSH,REHYDRATE,PAUSE,PERSIST,PURGE,REGISTER} from "redux-persist"
 import storage from "redux-persist/lib/storage"
 import userSlice from "./features/userSlice"
 import postSlice from "./features/postSlice"
+import categorySlice from "./features/categorySlice"
 
 
 
@@ -18,6 +19,8 @@ const persistConfig ={
 const rootReducer =combineReducers({
     user:userSlice,
      posts:postSlice,
+     categories:categorySlice
+
 })
 
 const persistedReducer=persistReducer(persistConfig,rootReducer)

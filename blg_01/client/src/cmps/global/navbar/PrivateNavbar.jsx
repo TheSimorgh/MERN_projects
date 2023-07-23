@@ -43,11 +43,8 @@ const PrivateNavbar = () => {
                   </Disclosure.Button>
                 </div>
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to="/">
-                    <FaBlog className="block text-green-500 h-8 w-auto lg:hidden" />
-
-                    <FaBlog className="hidden text-green-500 h-8 w-auto lg:block" />
-                  </Link>
+                  <Link to="/" className="font-bold hover:scale-150 transition-all">
+                  sem<span className="text-red-600 font-bold">urg</span>                  </Link>
                 </div>
                 <div className="hidden md:ml-6 md:flex md:space-x-8">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}

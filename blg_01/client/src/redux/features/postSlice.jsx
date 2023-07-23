@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { reset_error_action, reset_success_action } from "./globalSlice";
 import { BASE_URL } from "../../App";
+import Cookies from "js-cookie";
 
 //initialstate
 const INITIAL_STATE = {
@@ -12,6 +13,9 @@ const INITIAL_STATE = {
   post: null,
   success: false,
 };
+const user =  Cookies.get("userInfo") 
+? JSON.parse(Cookies.get("userInfo")) : null
+const {userAuth}=user
 
 export const get_public_posts = createAsyncThunk(
   "post/fetch-public-posts",
@@ -32,10 +36,10 @@ export const get_private_posts = createAsyncThunk(
     { rejectWithValue, getState, dispatch }
   ) => {
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken?.data?.token}`,
         },
       };
       const { data } = await axios.get(
@@ -62,10 +66,10 @@ export const get_post = createAsyncThunk(
 );
 
 export const delete_post = createAsyncThunk(
-  "post/delete/post",
+  "post/delete",
   async (postId, { rejectWithValue, getState, dispatch }) => {
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -79,7 +83,7 @@ export const delete_post = createAsyncThunk(
   }
 );
 
-export const create_post = createAsyncThunk(
+ export const create_post = createAsyncThunk(
   "post/create",
   async (payload, { rejectWithValue, getState, dispatch }) => {
     try {
@@ -89,15 +93,21 @@ export const create_post = createAsyncThunk(
       formData.append("content", payload?.content);
       formData.append("categoryId", payload?.category);
       formData.append("file", payload?.image);
-
-      const token = getState().users?.userAuth?.userInfo?.token;
+       const token = getState().user?.userAuth?.userInfo?.data?.token;
+      // const token=payload.token
+      
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${userToken?.data?.token}`,
+           Authorization: `Bearer ${userAuth.userInfo?.data?.token}`,
+
+    
+          
         },
       };
       const { data } = await axios.post(`${BASE_URL}/post`, formData, config);
       return data;
+    
     } catch (error) {
       return rejectWithValue(error?.response?.data);
     }
@@ -115,7 +125,7 @@ export const update_post = createAsyncThunk(
       formData.append("categoryId", payload?.category);
       formData.append("file", payload?.image);
 
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -137,7 +147,7 @@ export const like_post = createAsyncThunk(
   "post/like",
   async (postId, { rejectWithValue, getState, dispatch }) => {
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -158,7 +168,7 @@ export const dislike_post = createAsyncThunk(
   "post/dislike",
   async (postId, { rejectWithValue, getState, dispatch }) => {
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -182,7 +192,7 @@ export const clap_post = createAsyncThunk(
   async (postId, { rejectWithValue, getState, dispatch }) => {
     //make request
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -209,7 +219,7 @@ export const schedule_post = createAsyncThunk(
   ) => {
     //make request
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -233,7 +243,7 @@ export const post_view = createAsyncThunk(
   async (postId, { rejectWithValue, getState, dispatch }) => {
     //make request
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -292,7 +302,7 @@ const postSlice = createSlice({
     });
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //! get single post
-    builder.addCase(get_post.pending, (state, action) => {
+    builder.addCase(get_post.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(get_post.fulfilled, (state, action) => {
@@ -306,7 +316,7 @@ const postSlice = createSlice({
     });
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //! create post
-    builder.addCase(create_post.pending, (state, action) => {
+    builder.addCase(create_post.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(create_post.fulfilled, (state, action) => {
