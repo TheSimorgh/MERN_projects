@@ -37,7 +37,7 @@ const PostDetails = () => {
   //! Get the creator of the post
   const creator = post?.post?.author?._id?.toString();
   // //! get the login user
-  const loginUser = userAuth?.userInfo?._id?.toString();
+  const loginUser = userAuth?.userInfo?.data?._id?.toString();
 
   const isCreator = creator === loginUser;
 
@@ -45,7 +45,7 @@ const PostDetails = () => {
   const deletePostHandler = () => {
     dispatch(delete_post(postId));
     if (success) {
-      navigate("/posts");
+      navigate("/post");
     }
   };
   return (
@@ -138,7 +138,7 @@ const PostDetails = () => {
                 <div className="flex justify-end mb-4">
                   {/* edit */}
                   <Link
-                    to={`/posts/${post?.post?._id}/update`}
+                    to={`/post/${post?.post?._id}/update`}
                     className="p-2 mr-2 text-gray-500 hover:text-gray-700"
                   >
                     <svg
