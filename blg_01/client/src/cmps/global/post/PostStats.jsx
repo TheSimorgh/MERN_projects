@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import  { useEffect } from "react";
 import { AiOutlineEye } from "react-icons/ai";
@@ -23,6 +24,7 @@ const PostStats = ({
   //! Like post handler
   const likepostHandler = () => {
     dispatch(like_post(postId));
+    //window.location.reload()
   };
   //! disLike post handler
   const dislikepostHandler = () => {

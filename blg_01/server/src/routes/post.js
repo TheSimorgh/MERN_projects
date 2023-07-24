@@ -12,8 +12,8 @@ router.get("/", isLoggin,get_all_post);
 router.get("/public", get_pub_posts);
 router.get("/:id", get_one_post);
 router.post("/", isLoggin, upload.single("file"), create_post);
-router.delete("/:id", isLoggin,delete_post);
 router.put("/:id", isLoggin,upload.single("file"), update_post);
+router.delete("/:id", isLoggin,delete_post);
 router.put("/likes/:id", isLoggin, like_post);
 router.put("/dislikes/:id", isLoggin,dislike_post);
 router.put("/claps",isLoggin,claps)

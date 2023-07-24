@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage"
 import userSlice from "./features/userSlice"
 import postSlice from "./features/postSlice"
 import categorySlice from "./features/categorySlice"
+import commentsSlice from "./features/commentsSlice"
 
 
 
@@ -19,7 +20,8 @@ const persistConfig ={
 const rootReducer =combineReducers({
     user:userSlice,
      posts:postSlice,
-     categories:categorySlice
+     categories:categorySlice,
+     comments:commentsSlice,
 
 })
 

@@ -189,7 +189,7 @@ exports.update_post = asyncHandler(async (req, res) => {
     throw new Error("Post not found");
   }
   //! image update
-  const { title, category, content } = req.body;
+  const { title, category, content } = req.body; 
   const post = await Post.findByIdAndUpdate(
     id,
     {

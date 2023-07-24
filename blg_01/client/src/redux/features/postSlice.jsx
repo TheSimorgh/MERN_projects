@@ -39,7 +39,9 @@ export const get_private_posts = createAsyncThunk(
       const token = getState().user?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
-          Authorization: `Bearer ${userToken?.data?.token}`,
+          // Authorization: `Bearer ${userToken?.data?.token}`,
+                   Authorization: `Bearer ${token?.data?.token}`,
+
         },
       };
       const { data } = await axios.get(
@@ -239,7 +241,7 @@ export const schedule_post = createAsyncThunk(
   }
 );
 export const post_view = createAsyncThunk(
-  "posts/post-views",
+  "post/post-views",
   async (postId, { rejectWithValue, getState, dispatch }) => {
     //make request
     try {
