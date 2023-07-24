@@ -75,6 +75,320 @@ export const logout = createAsyncThunk("user/logout", async () => {
   return true;
 });
 
+//! Get User Public Profile Action
+
+export const user_pub_profile = createAsyncThunk(
+  "user/user-public-profile",
+  async (userId, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `${BASE_URL}/user/profile/${userId}`,
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//! Get User  Profile Action
+
+export const user_private_profile = createAsyncThunk(
+  "user/user-private-profile",
+  async (userId, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(`${BASE_URL}/user/profile/`, config);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//! Block User Action
+export const block_user = createAsyncThunk(
+  "user/block-user",
+  async (userId, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/user/block/${userId}`,
+        {},
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//! UnBlock User Action
+export const unblock_user = createAsyncThunk(
+  "user/unblock-user",
+  async (userId, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/user/unblock/${userId}`,
+        {},
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//!Follow User Action
+export const follow_user = createAsyncThunk(
+  "user/follow-user",
+  async (userId, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/user/following/${userId}`,
+        {},
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//!UnFollow User Action
+export const unfollow_user = createAsyncThunk(
+  "user/unfollow-user",
+  async (userId, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/user/unfollowing/${userId}`,
+        {},
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+// ! upload cover image
+export const upload_cover_img = createAsyncThunk(
+  "users/upload-cover-image",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    try {
+      //convert the payload to formdata
+      const formData = new FormData();
+      formData.append("file", payload?.image);
+
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/user/upload-cover-image`,
+        formData,
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+// ! upload profile image
+export const upload_prof_img = createAsyncThunk(
+  "users/upload-profile-image",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    try {
+      //convert the payload to formdata
+      const formData = new FormData();
+      formData.append("file", payload?.image);
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/user/upload-profile-image`,
+        formData,
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+//
+
+//! Send Account verification email Action
+export const send_acc_verf_email = createAsyncThunk(
+  "users/send-account-verification-email",
+  async (userId, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const token = getState().user?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/user/account-verification-email`,
+        {},
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//! verify account Action
+export const verify_acc = createAsyncThunk(
+  "users/account-verified",
+  async (verifyToken, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const token = getState().users?.userAuth?.userInfo?.data?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `${BASE_URL}/user/account-verification/${verifyToken}`,
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//!forgot password Action
+export const forgot_password = createAsyncThunk(
+  "users/forgot-password",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const { data } = await axios.post(
+        `${BASE_URL}/user/forgot-password`,
+        payload
+      );
+      //! save the user into localstorage
+      Cookies.set("userInfo", JSON.stringify(data));
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+//! reset password Action
+export const password_reset = createAsyncThunk(
+  "user/password-reset",
+  async ({ resetToken, password }, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    try {
+      const { data } = await axios.post(
+        `${BASE_URL}/user/reset-password/${resetToken}`,
+        {
+          password,
+        }
+      );
+      //! save the user into localstorage
+      Cookies.setItem("userInfo", JSON.stringify(data));
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+//! update user profile Action
+export const update_profile = createAsyncThunk(
+  "users/update-user-profile",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    //make request
+    console.log(payload);
+    try {
+      const token = getState().users?.userAuth?.userInfo?.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/users/update-profile/`,
+        payload,
+        config
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+export const xx = createAsyncThunk(
+  "users/",
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    try {
+      1;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -157,6 +471,168 @@ const userSlice = createSlice({
     //! Reset success action
     builder.addCase(reset_success_action.fulfilled, (state) => {
       state.success = false;
+    });
+
+    //get user public profile
+    builder.addCase(user_pub_profile.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(user_pub_profile.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(user_pub_profile.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+
+    //get user private profile
+    builder.addCase(user_private_profile.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(user_private_profile.fulfilled, (state, action) => {
+      state.profile = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(user_private_profile.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    //Update user profile
+    builder.addCase(update_profile.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(update_profile.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.isUpdated = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(update_profile.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+      state.isUpdated = false;
+    });
+
+    //block user
+    builder.addCase(block_user.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(block_user.fulfilled, (state, action) => {
+      state.profile = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(block_user.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+
+    //unblock user
+    builder.addCase(unblock_user.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(unblock_user.fulfilled, (state, action) => {
+      state.profile = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(unblock_user.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+
+    //follow user
+    builder.addCase(follow_user.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(follow_user.fulfilled, (state, action) => {
+      state.profile = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(follow_user.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    //unfollow user
+    builder.addCase(unblock_user.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(unblock_user.fulfilled, (state, action) => {
+      state.profile = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(unblock_user.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+
+    //forgot password
+    builder.addCase(forgot_password.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(forgot_password.fulfilled, (state, action) => {
+      state.isEmailSent = true;
+      state.emailMessage = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(forgot_password.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+
+    //reset password
+    builder.addCase(password_reset.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(password_reset.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.success = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(password_reset.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+
+    //Send Account verification email
+    builder.addCase(send_acc_verf_email.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(send_acc_verf_email.fulfilled, (state, action) => {
+      state.isEmailSent = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(send_acc_verf_email.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+    });
+    //Verify Account
+    builder.addCase(verify_acc.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(verify_acc.fulfilled, (state, action) => {
+      state.isverified = true;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(verify_acc.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
     });
   },
 

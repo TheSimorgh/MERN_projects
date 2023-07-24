@@ -14,4 +14,6 @@ export {default as PostStats} from "./global/post/PostStats";
 export {default as AddComment} from "./global/comment/AddComment";
 export {default as CommentLists} from "./global/comment/CommentLists";
 
+export {default as Followers} from "./global/post/Followers";
+export {default as UserPosts} from "./global/user/UserPosts";
 
