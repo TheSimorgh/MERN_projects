@@ -31,7 +31,7 @@ const PasswordResetReq = () => {
   };
   //store data
   const { loading, error, isEmailSent, emailMessage } = useSelector(
-    (state) => state?.users
+    (state) => state?.user
   );
   return (
     <form
