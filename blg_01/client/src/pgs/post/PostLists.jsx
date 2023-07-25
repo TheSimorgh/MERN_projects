@@ -2,15 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-
-
-
 import { Link, useNavigate } from "react-router-dom";
 import truncatePost from "../../utils/truncatePost";
 import { get_private_posts } from "../../redux/features/postSlice";
 import { get_categories } from "../../redux/features/categorySlice";
 import { LoadingCmp } from "../../cmps";
-
 
 const PostLists = () => {
   //! redux store
@@ -97,10 +93,10 @@ const PostLists = () => {
               ) : posts?.post?.length <= 0 ? (
                 <h1>No Post found</h1>
               ) : (
-                posts?.posts?.map((post,i) => {
+                posts?.posts?.map((post, i) => {
                   return (
                     <Link
-                    key={i}
+                      key={i}
                       to={`/posts/${post?._id}`}
                       className="w-full md:w-1/2 px-4 mb-8"
                     >
