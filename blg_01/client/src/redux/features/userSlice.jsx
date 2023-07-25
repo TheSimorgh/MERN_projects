@@ -361,7 +361,7 @@ export const update_profile = createAsyncThunk(
     //make request
     console.log(payload);
     try {
-      const token = getState().users?.userAuth?.userInfo?.token;
+      const token = getState().users?.userAuth?.userInfo?.data?.token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,

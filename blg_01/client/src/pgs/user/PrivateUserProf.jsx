@@ -117,7 +117,7 @@ const navigate=useNavigate()
                       </div>
                       {/* Warning */}
 
-                      {!userAuth?.userInfo?.isVerified && (
+                      {!userAuth?.userInfo?.data?.isVerified && (
                         <button
                           onClick={sendAccVerificationEmailHandler}
                           className="rounded-md mt-6 bg-yellow-50 p-4"
